@@ -13,26 +13,79 @@ class Quiz extends StatefulWidget {
 }
 
 class _QuizState extends State<Quiz> {
-  final List<Map> _questions = [
+  static const _questions = const [
     {
       'question': 'Question 1',
-      'answers': ['Ans1', 'Ans2', 'Ans3', 'Ans4']
+      'answers': [
+        {
+          'text': 'Ans1',
+          'score': 10,
+        },
+        {
+          'text': 'Ans2',
+          'score': 20,
+        },
+        {
+          'text': 'Ans3',
+          'score': 30,
+        },
+        {
+          'text': 'Ans4',
+          'score': 40,
+        }
+      ]
     },
     {
       'question': 'Question 2',
-      'answers': ['Ans1', 'Ans2', 'Ans3', 'Ans4']
+      'answers': [
+        {
+          'text': 'Ans1',
+          'score': 10,
+        },
+        {
+          'text': 'Ans2',
+          'score': 20,
+        },
+        {
+          'text': 'Ans3',
+          'score': 30,
+        },
+        {
+          'text': 'Ans4',
+          'score': 40,
+        }
+      ]
     },
     {
       'question': 'Question 3',
-      'answers': ['Ans1', 'Ans2', 'Ans3', 'Ans4']
+      'answers': [
+        {
+          'text': 'Ans1',
+          'score': 10,
+        },
+        {
+          'text': 'Ans2',
+          'score': 20,
+        },
+        {
+          'text': 'Ans3',
+          'score': 30,
+        },
+        {
+          'text': 'Ans4',
+          'score': 40,
+        }
+      ]
     }
   ];
 
   int _questionIndex = 0;
+  int _totalScore = 0;
 
   final int _totalQuestions = 3;
 
-  void _onPressed() {
+  void _onPressed(int score) {
+    _totalScore += score;
     if (_questionIndex < _totalQuestions) {
       setState(() {
         _questionIndex += 1;
@@ -65,25 +118,40 @@ class _QuizState extends State<Quiz> {
                   ),
                   Column(
                     children: <Widget>[
-                      Answer(
-                          _questions[_questionIndex]['answers'][0], _onPressed),
-                      Answer(
-                          _questions[_questionIndex]['answers'][1], _onPressed),
-                      Answer(
-                          _questions[_questionIndex]['answers'][2], _onPressed),
-                      Answer(
-                          _questions[_questionIndex]['answers'][3], _onPressed),
+                      ...(_questions[_questionIndex]['answers']
+                              as List<Map<String, Object>>)
+                          .map((answer) {
+                        return Answer(
+                            answer['text'], () => _onPressed(answer['score']));
+                      }).toList()
                     ],
                   )
                 ],
               )
-            : Center(
-                child: Text(
-                  'You are Done',
-                  style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                  ),
+            : Container(
+                padding: EdgeInsets.all(100),
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      'You are Done !!! ',
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    Container(
+                      margin: EdgeInsets.all(20),
+                      child: Text(
+                        'Your score is ' + _totalScore.toString(),
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                  ],
                 ),
               ),
       ),
